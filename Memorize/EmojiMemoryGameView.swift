@@ -17,7 +17,7 @@ struct EmojiMemoryGameView: View {
                     .onTapGesture {
                         self.game.choose(card: card)
                 }
-            .padding(5)
+                .padding(5)
             }
         }
         .padding()
@@ -30,24 +30,29 @@ struct CardView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            ZStack {
-                if self.card.isFaceUp {
-                    RoundedRectangle(cornerRadius: 10.0).fill(Color.white)
-                    RoundedRectangle(cornerRadius: 10.0).stroke(lineWidth: 3)
+            if self.card.isFaceUp || !self.card.isMathed {
+                ZStack {
+                    Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(90-90), clockwise: true)
+                        .padding(5)
+                        .opacity(0.4)
+                    
                     Text(self.card.content)
-                } else {
-                    if !self.card.isMathed {
-                        RoundedRectangle(cornerRadius: 10.0).fill()
-                    }
+                        .font(Font.system(size: fontSize(for: geometry.size)))
                 }
+                .cardify(isFaceUp: self.card.isFaceUp)
             }
-            .font(Font.system(size: min(geometry.size.width, geometry.size.height) * 0.75))
         }
     }
 }
 
+private func fontSize(for size: CGSize) -> CGFloat {
+    min(size.width, size.height) * 0.7
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        EmojiMemoryGameView(game: EmojiMemoryGame())
+        let game = EmojiMemoryGame()
+        game.choose(card: game.cards[0])
+        return EmojiMemoryGameView(game: game)
     }
 }
