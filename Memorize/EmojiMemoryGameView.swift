@@ -20,12 +20,13 @@ struct EmojiMemoryGameView: View {
                     }
                 }
                 .padding(5)
+                .foregroundColor(self.game.theme.color)
             }
             .padding()
-            .foregroundColor(.orange)
+            .navigationBarTitle(Text(self.game.theme.name))
             
             Button(action: {
-                withAnimation(.easeInOut){
+                withAnimation(.easeInOut) {
                     self.game.resetGame()
                 }
             }, label: {
@@ -53,12 +54,12 @@ struct CardView: View {
                 ZStack {
                     Group {
                         if self.card.isConsumingBonusTime {
-                            Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-self.animatedBonusRemaining*360-90), clockwise: true)
+                            Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-self.animatedBonusRemaining * 360 - 90), clockwise: true)
                                 .onAppear() {
                                     self.startBonusTimeAnimation()
                             }
                         } else {
-                            Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-self.card.bonusRemaining*360-90), clockwise: true)
+                            Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-self.card.bonusRemaining * 360 - 90), clockwise: true)
                         }
                     }
                     .padding(5)
@@ -82,7 +83,7 @@ private func fontSize(for size: CGSize) -> CGFloat {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let game = EmojiMemoryGame()
+        let game = EmojiMemoryGame(theme: themes[0])
         game.choose(card: game.cards[0])
         return EmojiMemoryGameView(game: game)
     }
